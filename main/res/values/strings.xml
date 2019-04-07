@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ProjektKoncowy</string>
+    <string name="camera">camera</string>
+    <string name="albums">albums</string>
+    <string name="collage">collage</string>
+    <string name="network">network</string>
+    <string name="notes">notes</string>
+</resources>
