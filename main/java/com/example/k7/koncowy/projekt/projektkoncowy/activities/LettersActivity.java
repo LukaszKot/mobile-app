@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.example.k7.koncowy.projekt.projektkoncowy.R;
 import com.example.k7.koncowy.projekt.projektkoncowy.customViews.ColorPicker;
 import com.example.k7.koncowy.projekt.projektkoncowy.customViews.PreviewText;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.IColorPickerCallback;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.TextInfo;
 
 import java.io.IOException;
 
@@ -35,10 +37,15 @@ public class LettersActivity extends AppCompatActivity {
     private RelativeLayout all;
     private ImageView inside;
     private ImageView edges;
+    private PreviewText previewText;
+    private int edgeColor;
+    private int mainColor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_letters);
+        edgeColor = 0xffff0000;
+        mainColor = 0xffff0000;
         fonts = findViewById(R.id.fonts);
         preview = findViewById(R.id.result);
         input = findViewById(R.id.input);
@@ -57,7 +64,9 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 preview.removeAllViews();
-                preview.addView(new PreviewText(LettersActivity.this, tf, input.getText().toString()));
+                previewText = new PreviewText(LettersActivity.this, tf,
+                        input.getText().toString(), mainColor, edgeColor);
+                preview.addView(previewText);
             }
         };
 
@@ -76,7 +85,8 @@ public class LettersActivity extends AppCompatActivity {
             final Typeface typeface=Typeface.createFromAsset(getAssets(),"fonts/"+font);
             final TextView textView = new TextView(LettersActivity.this);
             textView.setText("zazółć gęślą jaźń");
-            textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150));
+            textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, 150));
             textView.setTextColor(Color.parseColor("#aaaaaa"));
             textView.setTypeface(typeface);
             textView.setTextSize(50);
@@ -86,10 +96,13 @@ public class LettersActivity extends AppCompatActivity {
                     fontName = font;
                     tf = typeface;
                     preview.removeAllViews();
-                    preview.addView(new PreviewText(LettersActivity.this, tf, input.getText().toString()));
+                    previewText = new PreviewText(LettersActivity.this, tf,
+                            input.getText().toString(), mainColor, edgeColor);
+                    preview.addView(previewText);
                 }
             });
-            preview.addView(new PreviewText(LettersActivity.this, tf, ""));
+            preview.addView(new PreviewText(LettersActivity.this, tf, "", mainColor,
+                    edgeColor));
             fonts.addView(textView);
             input.addTextChangedListener(textWatcher);
         }
@@ -98,8 +111,9 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("text", input.getText().toString());
-                intent.putExtra("font", fontName);
+                TextInfo textInfo = new TextInfo(fontName,input.getText().toString(), mainColor,
+                        edgeColor, previewText.rect.width(), previewText.rect.height());
+                intent.putExtra("textInfo", textInfo);
                 setResult(300, intent);
                 finish();
             }
@@ -111,7 +125,17 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("xxx", "click");
-                ColorPicker colorPicker = new ColorPicker(LettersActivity.this);
+                ColorPicker colorPicker = new ColorPicker(LettersActivity.this, mainColor,
+                        new IColorPickerCallback() {
+                    @Override
+                    public void whenProcessDone(int color) {
+                        mainColor = color;
+                        preview.removeAllViews();
+                        previewText = new PreviewText(LettersActivity.this, tf,
+                                input.getText().toString(), mainColor, edgeColor);
+                        preview.addView(previewText);
+                    }
+                });
                 all.addView(colorPicker);
             }
         });
@@ -119,7 +143,17 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("xxx", "click");
-                ColorPicker colorPicker = new ColorPicker(LettersActivity.this);
+                ColorPicker colorPicker = new ColorPicker(LettersActivity.this, edgeColor,
+                        new IColorPickerCallback() {
+                    @Override
+                    public void whenProcessDone(int color) {
+                        edgeColor = color;
+                        preview.removeAllViews();
+                        previewText = new PreviewText(LettersActivity.this, tf,
+                                input.getText().toString(), mainColor, edgeColor);
+                        preview.addView(previewText);
+                    }
+                });
                 all.addView(colorPicker);
             }
         });
