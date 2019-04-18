@@ -1,5 +1,6 @@
 package com.example.k7.koncowy.projekt.projektkoncowy.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,6 +42,8 @@ public class PhotoActivity extends AppCompatActivity {
     private ListView listView;
     private FileRepository fileRepository;
     private NotesRepository notesRepository;
+    private int deltaX;
+    private int deltaY;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +103,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -105,12 +112,36 @@ public class PhotoActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
             Bundle extras = data.getExtras();
             TextInfo textInfo = (TextInfo)extras.getSerializable("textInfo");
-            RelativeLayout image = findViewById(R.id.theImage);
-            image.addView(new PreviewText(PhotoActivity.this,
+            FrameLayout image = findViewById(R.id.theImage);
+            final PreviewText text = new PreviewText(PhotoActivity.this,
                     Typeface.createFromAsset(getAssets(),
                             "fonts/"+textInfo.getFontName()),textInfo.getText(),
                     textInfo.getMainColor(),
-                    textInfo.getEdgesColor()));
+                    textInfo.getEdgesColor());
+            text.setLayoutParams(new RelativeLayout.LayoutParams((int)textInfo.getWidth()+1+30,
+                    (int)textInfo.getHeight()+1+50));
+            text.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    switch (motionEvent.getAction())
+                    {
+                        case MotionEvent.ACTION_DOWN:
+                            int x = Math.round(motionEvent.getRawX());
+                            int y = Math.round(motionEvent.getRawY()) - 100;
+                            deltaX = x - ((int)text.getX());
+                            deltaY = y - ((int)text.getY());
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            int x2 = Math.round(motionEvent.getRawX());
+                            int y2 = Math.round(motionEvent.getRawY()) - 100;
+                            text.setX(x2-deltaX);
+                            text.setY(y2-deltaY);
+                            break;
+                    }
+                    return true;
+                }
+            });
+            image.addView(text);
         }
 
     }
