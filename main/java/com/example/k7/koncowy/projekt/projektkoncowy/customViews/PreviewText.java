@@ -30,5 +30,9 @@ public class PreviewText extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(mainColor);
         canvas.drawText(text, 0, 100, paint);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(5);
+        paint.setColor(edgesColor);
+        canvas.drawText(text, 0, 100, paint);
     }
 }
