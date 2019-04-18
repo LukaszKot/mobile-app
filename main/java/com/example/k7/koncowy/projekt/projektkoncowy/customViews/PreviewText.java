@@ -10,7 +10,9 @@ import android.view.View;
 public class PreviewText extends View {
     private Paint paint;
     private String text;
-    public PreviewText(Context context, Typeface tp, String text) {
+    private int mainColor;
+    private int edgesColor;
+    public PreviewText(Context context, Typeface tp, String text, int mainColor, int edgesColor) {
         super(context);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.reset();
@@ -18,13 +20,15 @@ public class PreviewText extends View {
         paint.setTextSize(100);
         paint.setTypeface(tp);
         this.text = text;
+        this.mainColor = mainColor;
+        this.edgesColor = edgesColor;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.RED);
+        paint.setColor(mainColor);
         canvas.drawText(text, 0, 100, paint);
     }
 }

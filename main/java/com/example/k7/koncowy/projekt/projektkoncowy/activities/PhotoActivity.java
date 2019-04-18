@@ -108,7 +108,8 @@ public class PhotoActivity extends AppCompatActivity {
             RelativeLayout image = findViewById(R.id.theImage);
             image.addView(new PreviewText(PhotoActivity.this,
                     Typeface.createFromAsset(getAssets(),
-                            "fonts/"+fontName),text));
+                            "fonts/"+fontName),text, 0xffff0000,
+                    0xffff0000));
         }
 
     }
