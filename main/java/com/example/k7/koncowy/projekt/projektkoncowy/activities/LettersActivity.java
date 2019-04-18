@@ -21,6 +21,7 @@ import com.example.k7.koncowy.projekt.projektkoncowy.R;
 import com.example.k7.koncowy.projekt.projektkoncowy.customViews.ColorPicker;
 import com.example.k7.koncowy.projekt.projektkoncowy.customViews.PreviewText;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.IColorPickerCallback;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.TextInfo;
 
 import java.io.IOException;
 
@@ -107,8 +108,8 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("text", input.getText().toString());
-                intent.putExtra("font", fontName);
+                TextInfo textInfo = new TextInfo(fontName,input.getText().toString(), mainColor, edgeColor);
+                intent.putExtra("textInfo", textInfo);
                 setResult(300, intent);
                 finish();
             }

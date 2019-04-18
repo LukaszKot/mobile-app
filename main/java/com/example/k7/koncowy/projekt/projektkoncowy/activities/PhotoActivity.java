@@ -22,6 +22,7 @@ import com.example.k7.koncowy.projekt.projektkoncowy.adapters.PhotoOptionsAdapte
 import com.example.k7.koncowy.projekt.projektkoncowy.customViews.PreviewText;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.Note;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.PhotoOptions;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.TextInfo;
 import com.example.k7.koncowy.projekt.projektkoncowy.repositories.FileRepository;
 import com.example.k7.koncowy.projekt.projektkoncowy.repositories.NotesRepository;
 
@@ -103,13 +104,13 @@ public class PhotoActivity extends AppCompatActivity {
         {
             drawerLayout.closeDrawer(GravityCompat.START);
             Bundle extras = data.getExtras();
-            String fontName = (String) extras.get("font");
-            String text = (String) extras.get("text");
+            TextInfo textInfo = (TextInfo)extras.getSerializable("textInfo");
             RelativeLayout image = findViewById(R.id.theImage);
             image.addView(new PreviewText(PhotoActivity.this,
                     Typeface.createFromAsset(getAssets(),
-                            "fonts/"+fontName),text, 0xffff0000,
-                    0xffff0000));
+                            "fonts/"+textInfo.getFontName()),textInfo.getText(),
+                    textInfo.getMainColor(),
+                    textInfo.getEdgesColor()));
         }
 
     }
