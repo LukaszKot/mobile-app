@@ -37,6 +37,7 @@ public class LettersActivity extends AppCompatActivity {
     private RelativeLayout all;
     private ImageView inside;
     private ImageView edges;
+    private PreviewText previewText;
     private int edgeColor;
     private int mainColor;
     @Override
@@ -63,8 +64,9 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 preview.removeAllViews();
-                preview.addView(new PreviewText(LettersActivity.this, tf,
-                        input.getText().toString(), mainColor, edgeColor));
+                previewText = new PreviewText(LettersActivity.this, tf,
+                        input.getText().toString(), mainColor, edgeColor);
+                preview.addView(previewText);
             }
         };
 
@@ -94,8 +96,9 @@ public class LettersActivity extends AppCompatActivity {
                     fontName = font;
                     tf = typeface;
                     preview.removeAllViews();
-                    preview.addView(new PreviewText(LettersActivity.this, tf,
-                            input.getText().toString(), mainColor, edgeColor));
+                    previewText = new PreviewText(LettersActivity.this, tf,
+                            input.getText().toString(), mainColor, edgeColor);
+                    preview.addView(previewText);
                 }
             });
             preview.addView(new PreviewText(LettersActivity.this, tf, "", mainColor,
@@ -108,7 +111,8 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                TextInfo textInfo = new TextInfo(fontName,input.getText().toString(), mainColor, edgeColor);
+                TextInfo textInfo = new TextInfo(fontName,input.getText().toString(), mainColor,
+                        edgeColor, previewText.rect.width(), previewText.rect.height());
                 intent.putExtra("textInfo", textInfo);
                 setResult(300, intent);
                 finish();
@@ -127,8 +131,9 @@ public class LettersActivity extends AppCompatActivity {
                     public void whenProcessDone(int color) {
                         mainColor = color;
                         preview.removeAllViews();
-                        preview.addView(new PreviewText(LettersActivity.this, tf,
-                                input.getText().toString(), mainColor, edgeColor));
+                        previewText = new PreviewText(LettersActivity.this, tf,
+                                input.getText().toString(), mainColor, edgeColor);
+                        preview.addView(previewText);
                     }
                 });
                 all.addView(colorPicker);
@@ -144,8 +149,9 @@ public class LettersActivity extends AppCompatActivity {
                     public void whenProcessDone(int color) {
                         edgeColor = color;
                         preview.removeAllViews();
-                        preview.addView(new PreviewText(LettersActivity.this, tf,
-                                input.getText().toString(), mainColor, edgeColor));
+                        previewText = new PreviewText(LettersActivity.this, tf,
+                                input.getText().toString(), mainColor, edgeColor);
+                        preview.addView(previewText);
                     }
                 });
                 all.addView(colorPicker);

@@ -7,13 +7,18 @@ public class TextInfo implements Serializable {
     private String text;
     private int mainColor;
     private int edgesColor;
+    private float width;
+    private float height;
 
-    public TextInfo(String fontName, String text, int mainColor, int edgesColor)
+    public TextInfo(String fontName, String text, int mainColor, int edgesColor,
+                    int width, int height)
     {
         this.fontName = fontName;
         this.text= text;
         this.mainColor = mainColor;
         this.edgesColor = edgesColor;
+        this.width =width;
+        this.height = height;
     }
 
     public int getEdgesColor() {
@@ -46,5 +51,21 @@ public class TextInfo implements Serializable {
 
     public void setFontName(String fontName) {
         this.fontName = fontName;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 }
