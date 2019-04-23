@@ -55,7 +55,10 @@ public class PhotoActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
 
         ArrayList<PhotoOptions> options = new ArrayList<>();
-        options.add(new PhotoOptions("@drawable/outline_font_download_black_18dp", "fonts"));
+        options.add(new PhotoOptions("@drawable/outline_font_download_black_18dp",
+                "fonts"));
+        options.add(new PhotoOptions("@drawable/baseline_cloud_upload_black_18dp",
+                "upload to spec"));
         PhotoOptionsAdapter adapter = new PhotoOptionsAdapter(
                 PhotoActivity.this,
                 R.layout.photo_option_row,
@@ -63,7 +66,8 @@ public class PhotoActivity extends AppCompatActivity {
         );
         listView.setAdapter(adapter);
         fileRepository = FileRepository.getInstance();
-        notesRepository = new NotesRepository(PhotoActivity.this, "NotesKot.db", null, 1);
+        notesRepository = new NotesRepository(PhotoActivity.this, "NotesKot.db",
+                null, 1);
 
         Bundle bundle = getIntent().getExtras();
         String str = bundle.getString("uri");

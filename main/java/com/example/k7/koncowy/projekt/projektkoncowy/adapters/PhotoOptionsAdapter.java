@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 
 import com.example.k7.koncowy.projekt.projektkoncowy.R;
 import com.example.k7.koncowy.projekt.projektkoncowy.activities.LettersActivity;
+import com.example.k7.koncowy.projekt.projektkoncowy.alerts.CheckInternetAccessAlert;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.ICallback;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.Network;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.PhotoOptions;
 
 import java.util.ArrayList;
@@ -59,6 +63,16 @@ public class PhotoOptionsAdapter extends ArrayAdapter {
                 {
                     Intent intent = new Intent(appCompatActivity, LettersActivity.class);
                     appCompatActivity.startActivityForResult(intent,200);
+                }
+                else if(position==1)
+                {
+                    CheckInternetAccessAlert alert = new CheckInternetAccessAlert(_context);
+                    alert.enforceInternetAccess(new ICallback() {
+                        @Override
+                        public void whenProcessDone() {
+                            Log.d("xxx", "we can procced...");
+                        }
+                    });
                 }
             }
         });
