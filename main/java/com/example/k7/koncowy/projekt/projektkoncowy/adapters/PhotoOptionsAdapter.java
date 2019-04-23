@@ -1,12 +1,13 @@
 package com.example.k7.koncowy.projekt.projektkoncowy.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,24 +20,27 @@ import com.example.k7.koncowy.projekt.projektkoncowy.R;
 import com.example.k7.koncowy.projekt.projektkoncowy.activities.LettersActivity;
 import com.example.k7.koncowy.projekt.projektkoncowy.alerts.CheckInternetAccessAlert;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.ICallback;
-import com.example.k7.koncowy.projekt.projektkoncowy.domain.Network;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.PhotoOptions;
+import com.example.k7.koncowy.projekt.projektkoncowy.domain.UploadPhoto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class PhotoOptionsAdapter extends ArrayAdapter {
     private ArrayList<PhotoOptions> _list;
     private AppCompatActivity appCompatActivity;
     private Context _context;
     private int _resource;
+    private byte[] photo;
 
-    public PhotoOptionsAdapter(@NonNull Context context, int resource, @NonNull List objects) {
+    public PhotoOptionsAdapter(@NonNull Context context, int resource, @NonNull List objects, byte[] photo) {
         super(context, resource, objects);
         this._list=(ArrayList<PhotoOptions>) objects;
         this.appCompatActivity = (AppCompatActivity) context;
         this._context = context;
         this._resource = resource;
+        this.photo = photo;
     }
 
     @NonNull
@@ -70,7 +74,42 @@ public class PhotoOptionsAdapter extends ArrayAdapter {
                     alert.enforceInternetAccess(new ICallback() {
                         @Override
                         public void whenProcessDone() {
-                            Log.d("xxx", "we can procced...");
+                            AlertDialog.Builder alert = new AlertDialog.Builder(_context);
+                            alert.setTitle("Upload to Spec");
+                            alert.setMessage("Wysłać na spec-a?");
+                            alert.setNegativeButton("NIE", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                            alert.setPositiveButton("TAK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    try
+                                    {
+                                        String result = new UploadPhoto(_context, photo).execute().get();
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(_context);
+                                        alert.setTitle("KOMUNIKAT SERWERA");
+                                        alert.setMessage(result);
+                                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                            }
+                                        });
+                                        alert.show();
+                                    }
+                                    catch (InterruptedException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                    catch (ExecutionException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            });
+                            alert.show();
                         }
                     });
                 }

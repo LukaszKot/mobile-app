@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.net.Uri;
@@ -30,7 +32,10 @@ import com.example.k7.koncowy.projekt.projektkoncowy.domain.TextInfo;
 import com.example.k7.koncowy.projekt.projektkoncowy.repositories.FileRepository;
 import com.example.k7.koncowy.projekt.projektkoncowy.repositories.NotesRepository;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class PhotoActivity extends AppCompatActivity {
@@ -44,6 +49,7 @@ public class PhotoActivity extends AppCompatActivity {
     private NotesRepository notesRepository;
     private int deltaX;
     private int deltaY;
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,23 @@ public class PhotoActivity extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         drawerLayout = findViewById(R.id.drawer_layout);
         listView = findViewById(R.id.listView);
+        Bundle bundle = getIntent().getExtras();
+        String str = bundle.getString("uri");
+        final File file = new File(str);
+        Uri uri = Uri.fromFile(file);
+        image.setImageURI(uri);
+        Bitmap bitmap = null;
+        try {
+            InputStream stream = getContentResolver().openInputStream(uri);
+            bitmap = BitmapFactory.decodeStream(stream);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+        byte[] byteArray = outputStream.toByteArray();
 
         ArrayList<PhotoOptions> options = new ArrayList<>();
         options.add(new PhotoOptions("@drawable/outline_font_download_black_18dp",
@@ -62,17 +85,13 @@ public class PhotoActivity extends AppCompatActivity {
         PhotoOptionsAdapter adapter = new PhotoOptionsAdapter(
                 PhotoActivity.this,
                 R.layout.photo_option_row,
-                options
+                options,
+                byteArray
         );
         listView.setAdapter(adapter);
         fileRepository = FileRepository.getInstance();
         notesRepository = new NotesRepository(PhotoActivity.this, "NotesKot.db",
                 null, 1);
-
-        Bundle bundle = getIntent().getExtras();
-        String str = bundle.getString("uri");
-        final File file = new File(str);
-        image.setImageURI(Uri.fromFile(file));
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
