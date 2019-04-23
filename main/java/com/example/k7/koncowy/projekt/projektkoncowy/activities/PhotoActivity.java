@@ -82,6 +82,7 @@ public class PhotoActivity extends AppCompatActivity {
                 "fonts"));
         options.add(new PhotoOptions("@drawable/baseline_cloud_upload_black_18dp",
                 "upload to spec"));
+        options.add(new PhotoOptions("@drawable/baseline_share_black_18dp", "share"));
         PhotoOptionsAdapter adapter = new PhotoOptionsAdapter(
                 PhotoActivity.this,
                 R.layout.photo_option_row,
