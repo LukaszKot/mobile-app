@@ -1,10 +1,12 @@
 package com.example.k7.koncowy.projekt.projektkoncowy.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +72,20 @@ public class PhotoOptionsAdapter extends ArrayAdapter {
                     alert.enforceInternetAccess(new ICallback() {
                         @Override
                         public void whenProcessDone() {
-                            Log.d("xxx", "we can procced...");
+                            AlertDialog.Builder alert = new AlertDialog.Builder(_context);
+                            alert.setTitle("Upload to Spec");
+                            alert.setMessage("Wysłać na spec-a?");
+                            alert.setNegativeButton("NIE", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                            alert.setPositiveButton("TAK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                            alert.show();
                         }
                     });
                 }
