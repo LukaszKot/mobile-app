@@ -29,6 +29,7 @@ import com.example.k7.koncowy.projekt.projektkoncowy.domain.UploadPhoto;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -129,12 +130,8 @@ public class PhotoOptionsAdapter extends ArrayAdapter {
                     SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
                     String d = df.format(new Date());
                     String tempFileName = d+"tymczasowy.jpg";
-                    File dir = new File(Environment.getExternalStorageDirectory(),"temp");
-                    if(!dir.exists())
-                    {
-                        dir.mkdir();
-                    }
-                    File photoFile = new File(dir,tempFileName);
+                    File sdCard = Environment.getExternalStorageDirectory();
+                    File photoFile = new File(sdCard,tempFileName);
                     try
                     {
                         FileOutputStream fs = new FileOutputStream(photoFile);
@@ -142,7 +139,7 @@ public class PhotoOptionsAdapter extends ArrayAdapter {
                         fs.close();
                     }catch (FileNotFoundException e){}
                     catch (IOException e){}
-                    share.putExtra(Intent.EXTRA_STREAM, photoFile.toURI());
+                    share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/"+tempFileName));
                     _context.startActivity(Intent.createChooser(share,"Podziel się plikiem!"));
                 }
             }
