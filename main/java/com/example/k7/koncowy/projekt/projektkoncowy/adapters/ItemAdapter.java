@@ -30,8 +30,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
         Item item = _list.get(position);
-        holder.saveDate.setText(item.getSaveDate());
-        holder.size.setText(String.valueOf(item.getSize()));
+        holder.saveDate.setText("data zapisu: "+item.getSaveDate());
+        holder.size.setText("rozmiar: "+ String.valueOf(item.getSize()));
 
     }
 
