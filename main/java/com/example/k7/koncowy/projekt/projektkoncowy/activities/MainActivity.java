@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private FileRepository fileRepository;
     private LinearLayout camera;
     private LinearLayout notes;
+    private LinearLayout network;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,NotesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        network = findViewById(R.id.network);
+        network.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NetworkActivity.class);
                 startActivity(intent);
             }
         });
