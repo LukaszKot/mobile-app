@@ -8,7 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.k7.koncowy.projekt.projektkoncowy.R;
+import com.example.k7.koncowy.projekt.projektkoncowy.Settings;
 import com.example.k7.koncowy.projekt.projektkoncowy.domain.Item;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -32,6 +34,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         Item item = _list.get(position);
         holder.saveDate.setText("data zapisu: "+item.getSaveDate());
         holder.size.setText("rozmiar: "+ String.valueOf(item.getSize()));
+        Picasso.get()
+                .load(Settings.DOWNLOAD_IMAGES_URL+item.getName())
+                .into(holder.image);
 
     }
 
